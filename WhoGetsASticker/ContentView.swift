@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+//    @State var students: [String] = []
     @State var students = ["Natasha", "Shuri", "Shaun", "Steve", "Tony", "Bruce"]
-    @State var student = ""
+    @State var winner = ""
+    @State var formattedTooters = ""
     var body: some View {
         VStack {
             Text("Who Gets a Sticker?")
@@ -29,20 +31,20 @@ struct ContentView: View {
             
             Spacer()
             
-            Text(student)
+            Text(winner)
                 .font(.largeTitle)
                 .fontWeight(.black)
                 .frame(height: 10)
+                .minimumScaleFactor(0.8)
             
             Spacer()
             Spacer()
+            
+            Text(formattedTooters)
+                .font(.title2)
             
             Button{
-                if students.isEmpty{
-                    student = "No one tooted this week :("
-                } else{
-                    student = students.randomElement()!
-                }
+                winner = students.randomElement()!
             } label: {
                 Image(systemName: "person.crop.circle.badge.questionmark")
                 Text("Select Winner")
@@ -50,8 +52,23 @@ struct ContentView: View {
             .buttonStyle(.borderedProminent)
             .font(.title2)
             .tint(.indigo)
+            .disabled(students.isEmpty)
         }
         .padding()
+        .onAppear{
+            if students.isEmpty{
+                winner = "No one tooted this week :("
+            } else{
+                var appearString = "This weeks Tooters Were:\n\(students[0])"
+                if students.count>1{
+                    for i in (1...students.count-1){
+                        appearString += ", \(students[i])"
+                    }
+                }
+                formattedTooters = appearString
+            }
+            
+        }
     }
 }
 
